@@ -10,7 +10,7 @@ enable_manager_hostmanager() {
     local context_file=$1
     if ! grep -q '<Context' "$context_file"; then
         echo "Adding manager/host-manager configuration to $context_file"
-        sudo bash -c "cat context.txt > $context_file"
+        sudo cat /home/ec2-user/artisantek-2024/context.txt > $context_file 
     else
         echo "Manager/host-manager already configured in $context_file"
     fi
@@ -46,8 +46,8 @@ if [ ! -d "/opt/tomcat" ]; then
     sudo sed -i "s/port=\"8080\"/port=\"$port\"/" /opt/tomcat/conf/server.xml
 
     # Add service configuration
-    sudo cat tomcat.service | sudo tee /etc/systemd/system/tomcat.service &> /dev/null
-    sudo cat tomcat-users.txt | sudo tee /opt/tomcat/conf/tomcat-users.xml &> /dev/null
+    sudo cat /home/ec2-user/artisantek-2024/tomcat.service | sudo tee /etc/systemd/system/tomcat.service &> /dev/null
+    sudo cat /home/ec2-user/artisantek-2024/tomcat-users.txt | sudo tee /opt/tomcat/conf/tomcat-users.xml &> /dev/null
 
     # Enable manager and host manager
     enable_manager_hostmanager /opt/tomcat/webapps/manager/META-INF/context.xml
