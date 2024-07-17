@@ -76,6 +76,28 @@ else
     port=$(get_tomcat_port)
     echo "Tomcat is already installed on port: $port"
 
+
+    while true; do
+        read -p "Do you want to change the port? (yes/no): " change_port
+        if [[ "$change_port" == "yes" ]]; then
+            read -p "Enter new port for Tomcat (8080 or 9050): " new_port
+            if [[ "$new_port" != "8080" && "$new_port" != "9050" ]]; then
+                echo "Invalid port. Keeping the current port: $port."
+            else
+                sudo sed -i "s/port=\"$port\"/port=\"$new_port\"/" /opt/tomcat/conf/server.xml
+                sudo systemctl restart tomcat
+                port=$new_port
+                echo "Port changed to: $port and Tomcat restarted."
+            fi
+            break
+        elif [[ "$change_port" == "no" ]]; then
+            break
+        else
+            echo "Invalid response! Please enter 'yes' or 'no'."
+        fi
+    done
+
+    
     # Save the current directory
     original_dir=$(pwd)
 
