@@ -9,6 +9,7 @@ check_service_status() {
 # Check if Java is installed
 if ! java -version 2>&1 | grep -q "11.0.23"; then
     echo "Installing Java 11..."
+    echo "This may take sometime. Please wait..."
     sudo yum install java-11-openjdk-devel -y &> /dev/null
 else
     echo "Java 11 is already installed."
@@ -31,6 +32,9 @@ if [ ! -d "/opt/tomcat" ]; then
     if [[ "$port" != "8080" && "$port" != "9050" ]]; then
         echo "Invalid port. Defaulting to 8080."
         port=8080
+	else 
+		echo "Updated the port for Tomcat to: $port"
+		echo "Enabling manager, host-manager and restarting Tomcat..."
     fi
 
     sudo sed -i "s/port=\"8080\"/port=\"$port\"/" /opt/tomcat/conf/server.xml
@@ -45,7 +49,7 @@ if [ ! -d "/opt/tomcat" ]; then
 
     sudo systemctl daemon-reload
     sudo systemctl start tomcat
-    sudo systemctl enable tomcat
+    sudo systemctl enable tomcat &> /dev/null
     echo "Tomcat installed! Also manager and Host managr activated."
 else
     echo "Tomcat is already installed."
