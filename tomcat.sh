@@ -10,7 +10,7 @@ enable_manager_hostmanager() {
     local context_file=$1
     if ! grep -q '<Context' "$context_file"; then
         echo "Adding manager/host-manager configuration to $context_file"
-        sudo cat /home/ec2-user/artisantek-2024/context.txt > $context_file 
+        sudo cat /home/ec2-user/artisantek-2024/context.txt >>$context_file 
     else
         echo "Manager/host-manager already configured in $context_file"
     fi
