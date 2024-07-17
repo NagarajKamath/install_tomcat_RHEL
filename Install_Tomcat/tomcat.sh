@@ -37,6 +37,9 @@ if [ ! -d "/opt/tomcat" ]; then
     fi
 
     sudo yum install wget -y &> /dev/null
+
+    # Save the current directory
+    original_dir=$(pwd)
     cd /tmp
     wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz &> /dev/null
     sudo tar xf apache-tomcat-9.0.89.tar.gz -C /opt/tomcat --strip-components=1
@@ -55,14 +58,14 @@ if [ ! -d "/opt/tomcat" ]; then
     sudo sed -i "s/port=\"8080\"/port=\"$port\"/" /opt/tomcat/conf/server.xml
 
     # Add service configuration
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/tomcat.service /etc/systemd/system/tomcat.service
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/tomcat-users.txt /opt/tomcat/conf/tomcat-users.xml
+    sudo cp "$original_dir/tomcat.service" /etc/systemd/system/tomcat.service
+    sudo cp "$original_dir/tomcat-users.txt" /opt/tomcat/conf/tomcat-users.xml
 
     # Enable manager and host manager
     sudo mkdir -p /opt/tomcat/webapps/manager/META-INF
     sudo mkdir -p /opt/tomcat/webapps/host-manager/META-INF
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/context.txt /opt/tomcat/webapps/manager/META-INF/context.xml
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/context.txt /opt/tomcat/webapps/host-manager/META-INF/context.xml
+    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/manager/META-INF/context.xml
+    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/host-manager/META-INF/context.xml
 
     sudo systemctl daemon-reload
     sudo systemctl start tomcat
@@ -72,15 +75,18 @@ else
     port=$(get_tomcat_port)
     echo "Tomcat is already installed on port: $port"
 
+    # Save the current directory
+    original_dir=$(pwd)
+
     # Add service configuration
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/tomcat.service /etc/systemd/system/tomcat.service
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/tomcat-users.txt /opt/tomcat/conf/tomcat-users.xml
+    sudo cp "$original_dir/tomcat.service" /etc/systemd/system/tomcat.service
+    sudo cp "$original_dir/tomcat-users.txt" /opt/tomcat/conf/tomcat-users.xml
 
     # Enable manager and host manager if not enabled
     sudo mkdir -p /opt/tomcat/webapps/manager/META-INF
     sudo mkdir -p /opt/tomcat/webapps/host-manager/META-INF
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/context.txt /opt/tomcat/webapps/manager/META-INF/context.xml
-    sudo cp /home/ec2-user/artisantek-2024/Install_Tomcat/context.txt /opt/tomcat/webapps/host-manager/META-INF/context.xml
+    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/manager/META-INF/context.xml
+    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/host-manager/META-INF/context.xml
     sudo systemctl daemon-reload
 
     # Check if Tomcat is running
