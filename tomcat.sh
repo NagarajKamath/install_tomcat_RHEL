@@ -1,20 +1,10 @@
 #!/bin/bash
-
+set -x
 # Function to check if a service is running
 check_service_status() {
     systemctl is-active --quiet "$1"
 }
 
-# Function to enable manager and host manager in context.xml
-enable_manager_hostmanager() {
-    local context_file=$1
-    if ! grep -q '<Context' "$context_file"; then
-        echo "Adding manager/host-manager configuration to $context_file"
-        sudo cat /home/ec2-user/artisantek-2024/context.txt >>$context_file 
-    else
-        echo "Manager/host-manager already configured in $context_file"
-    fi
-}
 
 # Check if Java is installed
 if ! java -version 2>&1 | grep -q "11.0.23"; then
@@ -50,8 +40,9 @@ if [ ! -d "/opt/tomcat" ]; then
     sudo cat /home/ec2-user/artisantek-2024/tomcat-users.txt | sudo tee /opt/tomcat/conf/tomcat-users.xml &> /dev/null
 
     # Enable manager and host manager
-    enable_manager_hostmanager /opt/tomcat/webapps/manager/META-INF/context.xml
-    enable_manager_hostmanager /opt/tomcat/webapps/host-manager/META-INF/context.xml
+    sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/manager/META-INF/context.xml &> /dev/null
+    sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/host-manager/META-INF/context.xml &> /dev/null
+	echo "Tomcat installed! Also manager and Host managr activated."
 
     sudo systemctl daemon-reload
     sudo systemctl start tomcat
@@ -60,8 +51,8 @@ else
     echo "Tomcat is already installed."
 
     # Enable manager and host manager if not enabled
-    enable_manager_hostmanager /opt/tomcat/webapps/manager/META-INF/context.xml
-    enable_manager_hostmanager /opt/tomcat/webapps/host-manager/META-INF/context.xml
+	sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/manager/META-INF/context.xml &> /dev/null
+    sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/host-manager/META-INF/context.xml &> /dev/null
 
     # Check if Tomcat is running
     if ! check_service_status tomcat; then
