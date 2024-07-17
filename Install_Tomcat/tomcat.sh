@@ -39,7 +39,7 @@ if [ ! -d "/opt/tomcat" ]; then
     sudo yum install wget -y &> /dev/null
     cd /tmp
     wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz &> /dev/null
-    sudo tar xf apache-tomcat-9.0.89.tar.gz -C /opt/tomcat --strip-components=1 
+    sudo tar xf apache-tomcat-9.0.89.tar.gz -C /opt/tomcat --strip-components=1
     sudo chown -R tomcat: /opt/tomcat
     sudo chmod -R 755 /opt/tomcat
 
@@ -48,7 +48,7 @@ if [ ! -d "/opt/tomcat" ]; then
     if [[ "$port" != "8080" && "$port" != "9050" ]]; then
         echo "Invalid port. Defaulting to 8080."
         port=8080
-    else 
+    else
         echo "Updated the port for Tomcat to: $port"
     fi
 
@@ -75,14 +75,14 @@ else
     # Add service configuration
     sudo cp /home/ec2-user/artisantek-2024/tomcat/tomcat.service /etc/systemd/system/tomcat.service
     sudo cp /home/ec2-user/artisantek-2024/tomcat/tomcat-users.txt /opt/tomcat/conf/tomcat-users.xml
-    
+
     # Enable manager and host manager if not enabled
     sudo mkdir -p /opt/tomcat/webapps/manager/META-INF
     sudo mkdir -p /opt/tomcat/webapps/host-manager/META-INF
     sudo cp /home/ec2-user/artisantek-2024/tomcat/context.txt /opt/tomcat/webapps/manager/META-INF/context.xml
     sudo cp /home/ec2-user/artisantek-2024/tomcat/context.txt /opt/tomcat/webapps/host-manager/META-INF/context.xml
     sudo systemctl daemon-reload
-    
+
     # Check if Tomcat is running
     if ! check_service_status tomcat; then
         echo "Tomcat is not running. Attempting to restart..."
