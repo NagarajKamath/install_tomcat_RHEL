@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 # Function to check if a service is running
 check_service_status() {
     systemctl is-active --quiet "$1"
@@ -9,7 +9,7 @@ check_service_status() {
 # Check if Java is installed
 if ! java -version 2>&1 | grep -q "11.0.23"; then
     echo "Installing Java 11..."
-    sudo yum install java-11-openjdk-devel -y
+    sudo yum install java-11-openjdk-devel -y &> /dev/null
 else
     echo "Java 11 is already installed."
 fi
@@ -17,12 +17,12 @@ fi
 # Check if Tomcat is installed
 if [ ! -d "/opt/tomcat" ]; then
     echo "Tomcat is not installed. Installing Tomcat..."
-    
+
     sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat
-    sudo yum install wget -y
+    sudo yum install wget -y &> /dev/null
     cd /tmp
-    wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz
-    sudo tar xf /tmp/apache-tomcat-9.0.89.tar.gz -C /opt/tomcat --strip-components=1
+    wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz &> /dev/null
+    sudo tar xf /tmp/apache-tomcat-9.0.89.tar.gz -C /opt/tomcat --strip-components=1 
     sudo chown -R tomcat: /opt/tomcat
     sudo chmod -R 755 /opt/tomcat
 
@@ -42,16 +42,16 @@ if [ ! -d "/opt/tomcat" ]; then
     # Enable manager and host manager
     sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/manager/META-INF/context.xml &> /dev/null
     sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/host-manager/META-INF/context.xml &> /dev/null
-	echo "Tomcat installed! Also manager and Host managr activated."
 
     sudo systemctl daemon-reload
     sudo systemctl start tomcat
     sudo systemctl enable tomcat
+    echo "Tomcat installed! Also manager and Host managr activated."
 else
     echo "Tomcat is already installed."
 
     # Enable manager and host manager if not enabled
-	sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/manager/META-INF/context.xml &> /dev/null
+        sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/manager/META-INF/context.xml &> /dev/null
     sudo cat /home/ec2-user/artisantek-2024/context.txt | sudo tee /opt/tomcat/webapps/host-manager/META-INF/context.xml &> /dev/null
 
     # Check if Tomcat is running
