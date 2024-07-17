@@ -20,7 +20,7 @@ if ! java -version 2>&1 | grep -q "11.0.23"; then
     echo "This may take some time. Please wait..."
     sudo yum install java-11-openjdk-devel -y &> /dev/null
 else
-    echo "Java 11 is already installed."
+    echo "Java 11 is already installed." &> /dev/null
 fi
 
 # Check if Tomcat is installed
@@ -31,7 +31,7 @@ if [ ! -d "/opt/tomcat" ]; then
 
     # Check if the tomcat user exists
     if id "tomcat" &>/dev/null; then
-        echo ""
+        echo "" &> /dev/null
     else
         sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat
     fi
@@ -70,7 +70,8 @@ if [ ! -d "/opt/tomcat" ]; then
     sudo systemctl daemon-reload
     sudo systemctl start tomcat
     sudo systemctl enable tomcat &> /dev/null
-    echo "Tomcat installed! Also manager and Host manager activated."
+    echo ""
+    echo "Tomcat installed! Also manager and Host manager activated!"
 else
     port=$(get_tomcat_port)
     echo "Tomcat is already installed on port: $port"
