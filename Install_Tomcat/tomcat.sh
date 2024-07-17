@@ -31,7 +31,7 @@ if [ ! -d "/opt/tomcat" ]; then
 
     # Check if the tomcat user exists
     if id "tomcat" &>/dev/null; then
-        echo "User 'tomcat' already exists."
+        echo ""
     else
         sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat
     fi
