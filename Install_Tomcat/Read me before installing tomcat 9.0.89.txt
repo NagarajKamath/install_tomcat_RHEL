@@ -1,4 +1,4 @@
-Use these commands:
+Use these commands to instal Tomcat 9.0.89:
 sudo yum install git -y                #Use this only if git package isn't installed on your server
 
 git clone https://github.com/NagarajKamath/artisantek-2024.git
