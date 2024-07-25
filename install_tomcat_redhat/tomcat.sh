@@ -33,7 +33,7 @@ if [ ! -d "/opt/tomcat" ]; then
     if id "tomcat" &>/dev/null; then
         echo "" &> /dev/null
     else
-        sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat
+        sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat &> /dev/null
     fi
 
     sudo yum install wget -y &> /dev/null
@@ -130,9 +130,9 @@ fi
 public_ip=$(get_public_ip)
 echo ""
 echo ""
-echo "#########################################################"
-echo "# You can now access Tomcat at: http://$public_ip:$port #"
-echo "#########################################################"
+echo "##########################################################"
+echo "# You can now access Tomcat at: http://$public_ip:$port  #"
+echo "##########################################################"
 echo ""
 echo ""
 echo "Login details for manager and host-manager by default is:"
