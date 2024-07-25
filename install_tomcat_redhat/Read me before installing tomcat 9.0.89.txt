@@ -1,0 +1,12 @@
+Use these commands to instal Tomcat 9.0.89:
+sudo yum install git -y                #Use this only if git package isn't installed on your server
+
+git clone https://github.com/NagarajKamath/artisantek-2024.git
+cd  artisantek-2024/Install_Tomcat
+bash tomcat.sh
+
+
+
+
+Note: This script will asks user to select port while installing Tomcat. Also enables Manager and host-manager on the mentioned port.
+If the tomcat already installed, but tomcat isn't ative, then script will restart tomcat. If it fails, it gives the error.
