@@ -16,11 +16,11 @@ get_public_ip() {
 }
 
 # Check if Java is installed
-if ! java -version 2>&1 | grep -q "11.0.23"; then
+if ! java -version 2>&1 | grep -q "17.0.12"; then
     echo "This may take some time. Please wait..."
-    sudo yum install java-11-openjdk-devel -y &> /dev/null
+    sudo yum install java-17-openjdk-devel -y &> /dev/null
 else
-    echo "Java 11 is already installed." &> /dev/null
+    echo "Java 17 is already installed." &> /dev/null
 fi
 
 # Check if Tomcat is installed
