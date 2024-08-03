@@ -13,16 +13,15 @@ sudo chmod -R u+x /opt/tomcat/bin
 sudo cp "$original_dir/startup.sh" /opt/tomcat/bin/startup.sh
 sudo chown -R tomcat:tomcat /opt/tomcat/logs &> /dev/null
 sudo cp "$original_dir/tomcat.service" /etc/systemd/system/tomcat.service
-    sudo cp "$original_dir/tomcat-users.txt" /opt/tomcat/conf/tomcat-users.xml
+sudo cp "$original_dir/tomcat-users.txt" /opt/tomcat/conf/tomcat-users.xml
+# Enable manager and host manager
+sudo mkdir -p /opt/tomcat/webapps/manager/META-INF
+sudo mkdir -p /opt/tomcat/webapps/host-manager/META-INF
+sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/manager/META-INF/context.xml
+sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/host-manager/META-INF/context.xml
 
-    # Enable manager and host manager
-    sudo mkdir -p /opt/tomcat/webapps/manager/META-INF
-    sudo mkdir -p /opt/tomcat/webapps/host-manager/META-INF
-    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/manager/META-INF/context.xml
-    sudo cp "$original_dir/context.txt" /opt/tomcat/webapps/host-manager/META-INF/context.xml
-
-    sudo systemctl daemon-reload
-    sudo systemctl start tomcat 
-    sudo systemctl enable tomcat &> /dev/null
-    echo ""
-    echo "Tomcat installed! Also manager and Host manager activated!"
+sudo systemctl daemon-reload
+sudo systemctl start tomcat 
+sudo systemctl enable tomcat &> /dev/null
+echo ""
+echo "Tomcat installed! Also manager and Host manager activated!"
