@@ -17,7 +17,7 @@ get_public_ip() {
 
 # Check if Java is installed
 if ! java -version 2>&1 | grep -q "17.0.12"; then
-    echo "This may take some time. Please wait..."
+    echo "This may take some time as necessary packages getting installed. Please wait..."
     sudo yum install java-17-openjdk-devel -y &> /dev/null
 else
     echo "Java 17 is already installed." &> /dev/null
