@@ -10,15 +10,17 @@ get_tomcat_port() {
     grep 'Connector port' /opt/tomcat/conf/server.xml | grep 'protocol="HTTP/1.1"' | grep -o 'port="[0-9]*"' | sed 's/port="\([0-9]*\)"/\1/'
 }
 
-# Function to get the public IP address
+# Fuction to get the public IP address
 get_public_ip() {
     curl -s http://checkip.amazonaws.com
 }
 
 # Check if Java is installed
-if ! java -version 2>&1 | grep -q "17.0.12"; then
+if ! java -version 2>&1 | grep -q "17"; then
     echo "This may take some time as necessary packages getting installed. Please wait..."
-    sudo yum install java-17-openjdk-devel -y &> /dev/null
+    if ! sudo yum install java-17-openjdk-devel -y &> /dev/null; then
+        sudo yum update -y &> /dev/null;sudo yum install wget -y &> /dev/null;sudo mkdir /opt/java-17 &> /dev/null; wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz &> /dev/null;sudo tar xf openjdk-17_linux-x64_bin.tar.gz -C /opt/java-17/ --strip-components=1 &> /dev/null;export JAVA_HOME=/opt/java-17 &> /dev/null;export PATH=$JAVA_HOME/bin:$PATH &> /dev/null;java --version
+    fi
 else
     echo "Java 17 is already installed." &> /dev/null
 fi
